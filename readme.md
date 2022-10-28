@@ -67,13 +67,13 @@ The following screens might be out of date, since Spotify is constantly iteratin
 In the next few steps, you'll create all of the files that you need. So far, you have some basic setup in `app.js`, but that's not quite enough. As you remember, to get some packages (including `express`) in our app, we have to have them in the `package.json` file. So let's start listing the steps:
 
 1. Let's install all the dependencies we need to successfully run this app:
-   `npm install express hbs spotify-web-api-node dotenv`.
+   `npm install express ejs express-ejs-layouts spotify-web-api-node dotenv`.
 2. `nodemon` is installed as a dev dependency (our app doesn't depend on it but it helps us in the development process), which means we can use nodemon to run the app with: **`npm run dev`**.
 
 3. Inside of the `app.js` file, require `spotify-web-api-node`.
 
 ```js
-const SpotifyWebApi = require('spotify-web-api-node');
+const SpotifyWebApi = require('spotify-web-api-node')
 ```
 
 4. Inside of the `app.js` file, you'll find the place where you should paste the following code:
@@ -81,14 +81,14 @@ const SpotifyWebApi = require('spotify-web-api-node');
 ```javascript
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET
-});
+  clientSecret: process.env.CLIENT_SECRET,
+})
 
 // Retrieve an access token
 spotifyApi
   .clientCredentialsGrant()
   .then(data => spotifyApi.setAccessToken(data.body['access_token']))
-  .catch(error => console.log('Something went wrong when retrieving an access token', error));
+  .catch(error => console.log('Something went wrong when retrieving an access token', error))
 ```
 
 5. See this above?
@@ -96,8 +96,8 @@ spotifyApi
 ```js
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET
-});
+  clientSecret: process.env.CLIENT_SECRET,
+})
 ```
 
 To avoid making our API keys public, we don't want to add and commit them. We'll use a package named `dotenv` for that.
@@ -116,7 +116,7 @@ CLIENT_SECRET=your clientSecret goes here
 
 ## Iteration 2 | Express Setup
 
-Now let's create a `views` folder and let's add the `layout.hbs` file in it.
+Now let's create a `views` folder and let's add the `layout.ejs` file in it.
 At this moment we should have the following structure of folders and files:
 
 ```
@@ -129,15 +129,15 @@ lab-express-spotify
       │    └── stylesheets
       │         └── style.css
       └── views
-            └── layout.hbs
+            └── layout.ejs
 ```
 
 As we can see, in your _app.js_ we have required all the packages we need for now:
 
 ```javascript
-const express = require('express');
-const hbs = require('hbs');
-const SpotifyWebApi = require('spotify-web-api-node');
+const express = require('express')
+const expressLayouts = require('express-ejs-layouts')
+const SpotifyWebApi = require('spotify-web-api-node')
 ```
 
 We are good to go. Let's open the [spotify-web-api-node](https://www.npmjs.com/package/spotify-web-api-node) documentation and start our journey!
@@ -166,25 +166,25 @@ The method we will use from the npm package is: `spotifyApi.searchArtists()`. In
 spotifyApi
   .searchArtists(/*'HERE GOES THE QUERY ARTIST'*/)
   .then(data => {
-    console.log('The received data from the API: ', data.body);
+    console.log('The received data from the API: ', data.body)
     // ----> 'HERE WHAT WE WANT TO DO AFTER RECEIVING THE DATA FROM THE API'
   })
-  .catch(err => console.log('The error while searching artists occurred: ', err));
+  .catch(err => console.log('The error while searching artists occurred: ', err))
 ```
 
-In order to display the found artists' information, create `artist-search-results.hbs` file inside `views` folder and display name, image, and button (or link) to show the albums for a particular artist on a new view (for now just create the button/link and we will take care of the rest in the next step). Again, styling is not your priority, so let's move to the next step.
+In order to display the found artists' information, create `artist-search-results.ejs` file inside `views` folder and display name, image, and button (or link) to show the albums for a particular artist on a new view (for now just create the button/link and we will take care of the rest in the next step). Again, styling is not your priority, so let's move to the next step.
 <br><br>
 ![](https://s3-eu-west-1.amazonaws.com/ih-materials/uploads/upload_9dc721e76158df1836ef07565b5385c2.png)
 
 ## Iteration 4 | View Albums
 
-On the `artist-search-results.hbs` page we created the `View albums` button/link. Users should be taken to _some other page_ after clicking on it and there be able to see all the albums of that particular artist. **Hint**: the URL should include artist's `id` 🤓 and should change dynamically.
+On the `artist-search-results.ejs` page we created the `View albums` button/link. Users should be taken to _some other page_ after clicking on it and there be able to see all the albums of that particular artist. **Hint**: the URL should include artist's `id` 🤓 and should change dynamically.
 
 ```html
 <a href="/albums/someArtistIdGoesHere">View Albums</a>
 ```
 
-So let's create a new page - `albums.hbs` where all the results will be displayed. Make sure you show the _name_ and the _cover_ of each album and add a button/link to see the tracks (next iteration).
+So let's create a new page - `albums.ejs` where all the results will be displayed. Make sure you show the _name_ and the _cover_ of each album and add a button/link to see the tracks (next iteration).
 
 :zap: Check out the `.getArtistAlbums()` method in the [spotify-web-api-node](https://www.npmjs.com/package/spotify-web-api-node) documentation.
 
@@ -195,7 +195,7 @@ Your route should look like the following:
 ```javascript
 app.get('/albums/:artistId', (req, res, next) => {
   // .getArtistAlbums() code goes here
-});
+})
 ```
 
 ![](https://i.imgur.com/oaoqQMj.png)
