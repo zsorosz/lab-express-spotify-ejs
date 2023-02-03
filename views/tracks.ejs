@@ -1,0 +1,18 @@
+<div class="tracks-ctn">
+  <ul>
+    <div class="ul-header">
+      <h4>Title</h4>
+      <h4>Listen</h4>
+    </div>
+    <% allTracks.forEach(track => { %>
+    <li>
+      <% if (typeof track !== 'undefined') { %>
+      <h6><%- track.name %></h6>
+
+      <audio controls src="<%- track.preview_url %>">
+        <a href="<%- track.preview_url %>"> Download audio </a>
+      </audio>
+    </li>
+    <% }}) %>
+  </ul>
+</div>
